@@ -19,6 +19,7 @@ import bpy
 from pathlib import Path
 from ..utils import objects
 from ...cgt_naming import COLLECTIONS
+from ...freemocap_data_handler import load_freemocap_data
 
 
 class UI_CGT_transfer_anim_button(bpy.types.Operator):
@@ -89,6 +90,7 @@ class WM_CGT_modal_detection_operator(bpy.types.Operator):
     def execute(self, context):
         """ Runs movie or stream detection depending on user input. """
         self.user = context.scene.m_cgtinker_mediapipe  # noqa
+        print('Executing - WM_CGT_modal_detection_operator')
 
         # hacky way to check if operator is running
         if self.user.detection_operator_running is True:
@@ -118,13 +120,22 @@ class WM_CGT_modal_detection_operator(bpy.types.Operator):
             backend = int(self.user.enum_stream_type)
             key_step = self.user.key_frame_step
             self.detection_handler.init_detector(camera_index, dimensions, backend, frame_start, key_step, 0)
+        elif self.user.detection_input_type == 'freemocap':
+            freemocap_session_path = Path(bpy.path.abspath(self.user.freemocap_session_path))
+            if not Path(freemocap_session_path).is_dir():
+                print(f"No directory found at: {freemocap_session_path}")
+                self.user.detection_operator_running = False
+                return {'FINISHED'}
+            self.freemocap_body_data_dictionary  = load_freemocap_data(session_path = freemocap_session_path, detection_type = self.user.enum_detection_type)
+            self.number_of_freemocap_frames = self.freemocap_body_data_dictionary['nose']['x'].shape[0]
+            self.detection_handler.init_detector(input_type=2)
 
         # initialize the bridge from the detector to blender
         self.detection_handler.init_bridge()
 
         # add a timer property and start running
         wm = context.window_manager
-        self._timer = wm.event_timer_add(0.1, window=context.window)
+        self._timer = wm.event_timer_add(0.001, window=context.window)
         context.window_manager.modal_handler_add(self)
 
         print(f"RUNNING {detection_type} DETECTION AS MODAL")
@@ -137,7 +148,22 @@ class WM_CGT_modal_detection_operator(bpy.types.Operator):
     def modal(self, context, event):
         """ Run detection as modal operation, finish with 'Q', 'ESC' or 'RIGHT MOUSE'. """
         if event.type == "TIMER":
-            running = self.detection_handler.detector.image_detection()
+            if self.user.detection_input_type == 'freemocap':
+                # spoofing `BlendAR`'s frame-loop based loading methods.
+                #  Prolly slower than loading the `empty` data directly,
+                #  but easier to interface with the existing machinery 
+                # that @cgtinker put together this way :D
+                
+                current_frame_number = self.detection_handler.detector.frame
+                print(f"Loading `freemocap` data for frame {current_frame_number} of {self.number_of_freemocap_frames}")
+                self.detection_handler.detector.frame += self.detection_handler.detector.key_step
+                landmark_xyz_data_for_this_frame = convert_to_blendarmocap_format[self.freemocap_body_data_dictionary, current_frame_number]
+
+                
+                
+            else:
+                running = self.detection_handler.detector.image_detection()
+
             if running:
                 return {'PASS_THROUGH'}
             else:

@@ -39,10 +39,21 @@ class CGTProperties(PropertyGroup):
         name="Type",
         description="Select detection type for motion tracking.",
         items=(
+            ("freemocap", "FreeMoCap", "Load data from a FreeMoCap session folder"),
             ("stream", "Stream", ""),
             ("movie", "Movie", ""),
         )
     )
+
+    
+    freemocap_session_path: StringProperty(
+        name="session path",
+        description="Path to `freemocap` session folder",
+        default=r"D:\Dropbox\FreeMoCapProject\FreeMocap_Data\sesh_2022-09-19_16_16_50_in_class_jsm",
+        subtype='DIR_PATH'
+    )
+
+    # endregion
 
     # region WEBCAM
     webcam_input_device: IntProperty(
@@ -117,10 +128,10 @@ class CGTProperties(PropertyGroup):
         name="Target",
         description="Select detection type for motion tracking.",
         items=(
+            ("POSE", "Pose (Body)", ""),
+            ("HOLISTIC", "Holistic (Experimental)", "Pose(body), both hands, and face"),
             ("HAND", "Hands", ""),
             ("FACE", "Face", ""),
-            ("POSE", "Pose", ""),
-            ("HOLISTIC", "Holistic (Experimental)", ""),
         )
     )
     # endregion

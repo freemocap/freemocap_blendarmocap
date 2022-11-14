@@ -32,7 +32,7 @@ class RealtimeDetector(ABC):
     frame = None
 
     def __init__(self, frame_start: int = 0, key_step: int = 4, input_type: int = None):
-        self.input_type = input_type  # stream or movie (0/1)
+        self.input_type = input_type  # stream, movie, or freemocap (0/1/2)
         self.drawing_utils = solutions.drawing_utils
         self.drawing_style = solutions.drawing_styles
         self.frame = frame_start
@@ -65,7 +65,7 @@ class RealtimeDetector(ABC):
     def draw_result(self, s, mp_res, mp_drawings):
         pass
 
-    def exec_detection(self, mp_lib):
+    def exec_detection(self, mp_lib)->bool:
         self.stream.update()
         updated = self.stream.updated
 

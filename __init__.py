@@ -17,17 +17,17 @@ Copyright (C) cgtinker, cgtinker.com, hello@cgtinker.com
 
 
 bl_info = {
-    "name":        "BlendArMocap",
-    "description": "Mediapipe implementation for Blender 2.9+",
-    "author":      "cgtinker",
-    "version":     (1, 5, 2),
+    "name":        "freemocap_blendarmocap",
+    "description": "A fork of the @cgtinker's `BlendArMocap` addon tweaked to facilitate loading `freemocap` data into Blender ",
+    "author":      "jonmatthis",
+    "version":     (0, 0, 1),
     "blender":     (2, 90, 0),
     "location":    "3D View > Tool",
     "warning":     "Requires external packages and elevated privileges",
-    "wiki_url":    "https://github.com/cgtinker/BlendArMocap",
-    "tracker_url": "https://github.com/cgtinker/BlendArMocap/issues",
+    "wiki_url":    "https://github.com/freemocap/freemocap_blendarmocap",
+    "tracker_url": "https://github.com/freemocap/freemocap_blendarmocap/issues",
     "support":     "COMMUNITY",
-    "category":    "Development"
+    "category":    "Animation"
 }
 
 

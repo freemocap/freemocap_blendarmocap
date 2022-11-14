@@ -26,7 +26,7 @@ from ... import cgt_naming
 class DefaultPanel:
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "BlendAR"
+    bl_category = "freemocap_blendar"
     # bl_context = "objectmode"
     bl_options = {"DEFAULT_CLOSED"}
 
@@ -34,7 +34,7 @@ class DefaultPanel:
 class ExpandedPanel:
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "BlendAR"
+    bl_category = "freemocap_blendar"
     # bl_context = "objectmode"
     bl_options = {"HEADER_LAYOUT_EXPAND"}
 
@@ -53,29 +53,35 @@ class UI_PT_CGT_main_panel(DefaultPanel, Panel):
 
         # detection
         box = self.layout.box()
-        box.label(text='Detect')
         if user.pvb:
             box.row().prop(user, "detection_input_type")
 
         if user.detection_input_type == "movie":
             box.row().prop(user, "mov_data_path")
             start_button_text = user.button_start_detection
+            during_detection_button_text = "Stop Detection  "
         elif user.detection_input_type == "stream":
             box.row().prop(user, "webcam_input_device")
             box.row().prop(user, "key_frame_step")
             start_button_text = user.button_start_detection
+            during_detection_button_text = "Stop Detection  "
+        elif user.detection_input_type == "freemocap":
+            box.label(text='Locate a FreeMoCap session folder')
+            box.row().prop(user, "freemocap_session_path")            
+            start_button_text = "Load FreeMoCap Data"
+            during_detection_button_text = "Loading...."
 
         # settings
         box.row().prop(user, "enum_detection_type")
         if user.detection_operator_running:
-            box.row().operator("wm.cgt_feature_detection_operator", text="Stop Detection")
+            box.row().operator("wm.cgt_feature_detection_operator", text=during_detection_button_text)
         else:
             box.row().operator("wm.cgt_feature_detection_operator", text=start_button_text)
 
         # transfer animation
         box = self.layout.box()
 
-        box.label(text='Animation Transfer')
+        box.label(text='Transfer Animation data to Rig')
         box.row(align=True).prop_search(data=user,
                                         property="selected_driver_collection",
                                         search_data=bpy.data,
