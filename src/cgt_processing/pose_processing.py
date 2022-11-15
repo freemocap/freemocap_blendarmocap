@@ -24,6 +24,43 @@ from ..cgt_utils import m_V
 
 
 class PoseProcessor(processor_interface.DataProcessor):
+
+ids={
+    "nose_idx"              : 0,
+    "left_eye_inner_idx"    : 1,
+    "left_eye_idx"          : 2,
+    "left_eye_outer_idx"    : 3,
+    "right_eye_inner_idx"   : 4,
+    "right_eye_idx"         : 5,
+    "right_eye_outer_idx"   : 6,
+    "left_ear_idx"          : 7,
+    "right_ear_idx"         : 8,
+    "mouth_left_idx"        : 9,
+    "mouth_right_idx"       : 10,
+    "left_shoulder_idx"     : 11,
+    "right_shoulder_idx"    : 12,
+    "left_elbow_idx"        : 13,
+    "right_elbow_idx"       : 14,
+    "left_wrist_idx"        : 15,
+    "right_wrist_idx"       : 16,
+    "left_pinky_idx"        : 17,
+    "right_pinky_idx"       : 18,
+    "left_index_idx"        : 19,
+    "right_index_idx"       : 20,
+    "left_thumb_idx"        : 21,
+    "right_thumb_idx"       : 22,
+    "left_hip_idx"          : 23,
+    "right_hip_idx"         : 24,
+    "left_knee_idx"         : 25,
+    "right_knee_idx"        : 26,
+    "left_ankle_idx"        : 27,
+    "right_ankle_idx"       : 28,
+    "left_heel_idx"         : 29,
+    "right_heel_idx"        : 30,
+    "left_foot_index_idx"   : 31,
+    "right_foot_index_idx"  : 32,
+}
+
     arms = [
         [12, 17],  # right arm
         [11, 16]  # left arm
