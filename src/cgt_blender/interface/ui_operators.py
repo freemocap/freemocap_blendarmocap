@@ -128,7 +128,7 @@ class WM_CGT_modal_detection_operator(bpy.types.Operator):
                 self.user.detection_operator_running = False
                 return {'FINISHED'}
             self.freemocap_data_handler = FreeMoCapDataHandler(session_path = freemocap_session_path, detection_type=detection_type)
-
+            bpy.context.scene.frame_end = self.freemocap_data_handler.number_of_frames
             self.detection_handler.init_detector(input_type=2)
 
         # initialize the bridge from the detector to blender
@@ -284,8 +284,9 @@ class WM_FMC_load_synchronized_videos(bpy.types.Operator):
                 
                 this_vid_as_plane.location = [vid_x, vid_location_scale, vid_location_scale]
                 this_vid_as_plane.rotation_euler = [np.pi/2, 0, 0]
-                this_vid_as_plane.scale = [vid_location_scale*1.5]*3
+                this_vid_as_plane.scale = [1]*3
                 this_vid_as_plane.parent = world_origin 
+                print('djj')
                 # create a light
                 # bpy.ops.object.light_add(type='POINT', radius=1, align='WORLD')
         except Exception as e:

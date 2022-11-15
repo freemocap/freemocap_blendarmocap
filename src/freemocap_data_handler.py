@@ -13,7 +13,7 @@ class FreeMoCapDataHandler:
 
 
         if self._detection_type == 'POSE':
-            self.body_frame_landmark_dimension = np.load(self._get_body_npy_path(self._session_path)) / 1000 #convert to meters 
+            self.body_frame_landmark_xyz = np.load(self._get_body_npy_path(self._session_path)) / 1000 #convert to meters
         else:
             raise NotImplementedError(
                 f'Only POSE detection type is supported at this time. You provided {self._detection_type}')
@@ -24,22 +24,22 @@ class FreeMoCapDataHandler:
 
     @property
     def number_of_frames(self):
-        return self.body_frame_landmark_dimension.shape[0]
+        return self.body_frame_landmark_xyz.shape[0]
 
     def get_frame_data(self, frame_number:int)->list:
         """ Get the data for a specific frame number in the BlendARMocap format - [landmark_index_number, [x, y, z]. """
 
         landmark_xyz_data = []
-        for landmark_number in range(self.body_frame_landmark_dimension.shape[1]):
-            landmark_xyz_data.append([landmark_number, self.body_frame_landmark_dimension[frame_number, landmark_number, :]])
+        for landmark_number in range(self.body_frame_landmark_xyz.shape[1]):
+            landmark_xyz_data.append([landmark_number, self.body_frame_landmark_xyz[frame_number, landmark_number, :]])
 
         return landmark_xyz_data
     def load_freemocap_data(self)->dict:
         """ Load the data from a freemocap session. """
 
         freemocap_data_dict = {}
-        freemocap_data_dict[self._detection_type] = self._build_freemocap_body_data_dictionary(self.body_frame_landmark_dimension,
-                                                              self.mediapipe_body_landmark_names)
+        freemocap_data_dict[self._detection_type] = self._build_freemocap_body_data_dictionary(self.body_frame_landmark_xyz,
+                                                                                               self.mediapipe_body_landmark_names)
         return freemocap_data_dict
 
     def _build_freemocap_body_data_dictionary(self, body_frame_landmark_dimension, mediapipe_body_landmark_names):

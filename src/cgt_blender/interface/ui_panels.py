@@ -81,6 +81,8 @@ class UI_PT_CGT_main_panel(DefaultPanel, Panel):
         if user.detection_input_type == "freemocap":
             box.row().operator("wm.fmc_bind_freemocap_data_to_skeleton", text="Bind animation to Rigify Human Rig")
             box.row().operator("wm.fmc_load_synchronized_videos", text="Load synchronized videos")
+            
+
 
         # transfer animation
         box = self.layout.box()
