@@ -19,7 +19,7 @@ import bpy
 from pathlib import Path
 from ..utils import objects
 from ...cgt_naming import COLLECTIONS
-from ...freemocap_data_handler import load_freemocap_data
+from ...freemocap_data_handler import FreeMoCapDataHandler
 
 
 class UI_CGT_transfer_anim_button(bpy.types.Operator):
@@ -126,8 +126,8 @@ class WM_CGT_modal_detection_operator(bpy.types.Operator):
                 print(f"No directory found at: {freemocap_session_path}")
                 self.user.detection_operator_running = False
                 return {'FINISHED'}
-            self.freemocap_body_data_dictionary  = load_freemocap_data(session_path = freemocap_session_path, detection_type = self.user.enum_detection_type)
-            self.number_of_freemocap_frames = self.freemocap_body_data_dictionary['nose']['x'].shape[0]
+            self.freemocap_data_handler = FreeMoCapDataHandler(session_path = freemocap_session_path, detection_type=detection_type)
+
             self.detection_handler.init_detector(input_type=2)
 
         # initialize the bridge from the detector to blender
@@ -151,16 +151,23 @@ class WM_CGT_modal_detection_operator(bpy.types.Operator):
             if self.user.detection_input_type == 'freemocap':
                 # spoofing `BlendAR`'s frame-loop based loading methods.
                 #  Prolly slower than loading the `empty` data directly,
-                #  but easier to interface with the existing machinery 
+                #  but easier to interface with the existing machinery
                 # that @cgtinker put together this way :D
-                
-                current_frame_number = self.detection_handler.detector.frame
-                print(f"Loading `freemocap` data for frame {current_frame_number} of {self.number_of_freemocap_frames}")
-                self.detection_handler.detector.frame += self.detection_handler.detector.key_step
-                landmark_xyz_data_for_this_frame = convert_to_blendarmocap_format[self.freemocap_body_data_dictionary, current_frame_number]
 
-                
-                
+                current_frame_number = self.detection_handler.detector.frame
+                print(f"Loading `freemocap` data for frame {current_frame_number} of {self.freemocap_data_handler.number_of_frames}")
+                current_frame_number = self.detection_handler.detector.frame
+
+                landmark_xyz_data_for_this_frame = self.freemocap_data_handler.get_frame_data(current_frame_number)
+                self.detection_handler.detector.listener.data = landmark_xyz_data_for_this_frame
+                self.detection_handler.detector.update_listeners()
+
+                self.detection_handler.detector.frame += self.detection_handler.detector.key_step
+
+                running = not(self.detection_handler.detector.frame >= self.freemocap_data_handler.number_of_frames)
+
+
+
             else:
                 running = self.detection_handler.detector.image_detection()
 

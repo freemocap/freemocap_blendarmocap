@@ -219,9 +219,9 @@ class FaceProcessor(processor_interface.DataProcessor):
 
     def custom_landmark_origin(self):
         """ Sets face mesh position to approximate origin """
-        self.data = [[idx, [-lmrk[0], lmrk[2], -lmrk[1]]] for idx, lmrk in self.data[:468]]
+        self.data = [[idx, [landmark[0], landmark[1], landmark[2]]] for idx, landmark in self.data[:468]]
         self.approximate_pivot_location()
-        self.data = [[idx, np.array(lmrk) - np.array(self.pivot.loc)] for idx, lmrk in self.data[:468]]
+        self.data = [[idx, np.array(landmark) - np.array(self.pivot.loc)] for idx, landmark in self.data[:468]]
 
     def approximate_pivot_location(self):
         """ Sets to approximate origin based on canonical face mesh geometry """

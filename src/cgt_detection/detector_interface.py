@@ -102,9 +102,11 @@ class RealtimeDetector(ABC):
         self.listener.data = self.get_detection_results(mp_res)
         self.update_listeners()
 
+
         # exit stream
         if self.stream.exit_stream():
             return False
+             
         return True
 
     def update_listeners(self):
@@ -118,6 +120,13 @@ class RealtimeDetector(ABC):
 
     def __del__(self):
         self.listener.detach(self.observer)
-        del self.observer
-        del self.listener
-        del self.stream
+        if self.stream is not None:
+            del self.stream
+        
+        if self.observer is not None:
+            del self.observer
+        
+        if self.listener is not None:
+            del self.listener
+        
+        

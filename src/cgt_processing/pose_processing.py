@@ -216,4 +216,4 @@ class PoseProcessor(processor_interface.DataProcessor):
 
     def prepare_landmarks(self):
         """ setting face mesh position to approximate origin """
-        self.data = [[idx, np.array([-landmark[0], landmark[2], -landmark[1]])] for idx, landmark in self.data]
+        self.data = [[idx, np.array([landmark[0], landmark[1], landmark[2]])] for idx, landmark in self.data]
