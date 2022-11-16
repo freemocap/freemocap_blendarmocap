@@ -33,29 +33,32 @@ class RigifyPose(abs_rigging.BpyRigging):
     bone_name_provider.update()
     rigify_joints = [
         # arms
-        [bone_name_provider.shoulder_c, bone_name_provider.upper_arm_R],
-        [bone_name_provider.upper_arm_R, bone_name_provider.forearm_R],
-        [bone_name_provider.forearm_R, bone_name_provider.hand_R],
-        [bone_name_provider.hand_R, bone_name_provider.finger_R],
         [bone_name_provider.shoulder_c, bone_name_provider.upper_arm_L],
         [bone_name_provider.upper_arm_L, bone_name_provider.forearm_L],
         [bone_name_provider.forearm_L, bone_name_provider.hand_L],
         [bone_name_provider.hand_L, bone_name_provider.finger_L],
+        [bone_name_provider.shoulder_c, bone_name_provider.upper_arm_R],
+        [bone_name_provider.upper_arm_R, bone_name_provider.forearm_R],
+        [bone_name_provider.forearm_R, bone_name_provider.hand_R],
+        [bone_name_provider.hand_R, bone_name_provider.finger_R],
 
         # legs
-        [bone_name_provider.hip_c, bone_name_provider.upper_leg_R],
-        [bone_name_provider.upper_leg_R, bone_name_provider.knee_R],
-        [bone_name_provider.knee_R, bone_name_provider.foot_R],
-        [bone_name_provider.foot_R, bone_name_provider.toe_R],
         [bone_name_provider.hip_c, bone_name_provider.upper_leg_L],
         [bone_name_provider.upper_leg_L, bone_name_provider.knee_L],
         [bone_name_provider.knee_L, bone_name_provider.foot_L],
         [bone_name_provider.foot_L, bone_name_provider.toe_L],
+        [bone_name_provider.hip_c, bone_name_provider.upper_leg_R],
+        [bone_name_provider.upper_leg_R, bone_name_provider.knee_R],
+        [bone_name_provider.knee_R, bone_name_provider.foot_R],
+        [bone_name_provider.foot_R, bone_name_provider.toe_R],
+
     ]
 
+
     rigify_bone_center = [
-        [bone_name_provider.upper_arm_R, bone_name_provider.upper_arm_L],
-        [bone_name_provider.upper_leg_R, bone_name_provider.upper_leg_L]
+        #JSM NOTE - There was an error here in the OG BlendAr code that made the `left_bone` and `right_bone` variables  in the `pose_constraints` thing switched
+        [bone_name_provider.upper_arm_L, bone_name_provider.upper_arm_R],
+        [bone_name_provider.upper_leg_L, bone_name_provider.upper_leg_R]
     ]
 
     # region limb drivers

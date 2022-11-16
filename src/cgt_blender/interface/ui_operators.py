@@ -129,7 +129,7 @@ class WM_CGT_modal_detection_operator(bpy.types.Operator):
                 return {'FINISHED'}
             self.freemocap_data_handler = FreeMoCapDataHandler(session_path = freemocap_session_path, detection_type=detection_type)
             bpy.context.scene.frame_end = self.freemocap_data_handler.number_of_frames
-            self.detection_handler.init_detector(input_type=2)
+            self.detection_handler.init_detector(input_type=2, frame_start=0)
 
         # initialize the bridge from the detector to blender
         self.detection_handler.init_bridge()

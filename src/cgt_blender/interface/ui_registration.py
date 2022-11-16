@@ -31,6 +31,8 @@ def get_classes():
         ui_operators.UI_CGT_transfer_anim_button,
         ui_operators.UI_CGT_toggle_drivers_button,
         ui_operators.WM_CGT_modal_detection_operator,
+        ui_operators.WM_FMC_load_synchronized_videos,
+        ui_operators.WM_FMC_bind_freemocap_data_to_skeleton,
         ui_panels.UI_PT_CGT_main_panel,
         # ui_panels.UI_PT_RemappingPanel
     )
@@ -49,7 +51,7 @@ def register():
     print('Registing BlendArMocap\n')
 
     for m_class in get_preferences():
-        # print(m_class)
+        print(m_class)
         register_class(m_class)
 
     try:
@@ -69,6 +71,7 @@ def register():
 
 def register_user_interface():
     for cls in get_classes():
+        print(cls)
         try:
             register_class(cls)
         except ValueError:

@@ -14,6 +14,7 @@ class FreeMoCapDataHandler:
 
         if self._detection_type == 'POSE':
             self.body_frame_landmark_xyz = np.load(self._get_body_npy_path(self._session_path)) / 1000 #convert to meters
+   
         else:
             raise NotImplementedError(
                 f'Only POSE detection type is supported at this time. You provided {self._detection_type}')
